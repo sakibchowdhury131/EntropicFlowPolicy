@@ -1,0 +1,32 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# large training artifacts — not code, kept locally
+checkpoints/
+models/
+models_real/
+run_no_dc_aug/
+run_residual_dc_aug/
+run_residual_no_dc_aug/
+
+# raw eval/demo media — curated versions live on the findings webpage
+videos/
+videos_dp/
+videos_eval/
+videos_heat/
+gifs/
+gifs_real/
+
+# datasets
+*.zarr.zip
+*.zarr_backup.zip
+
+# side-project bulk outputs
+forImageGen/data/
+forImageGen/outputs_reorg/
+forImageGen/outputs_video/
+
+# stray duplicate file
+efp_hard_v6 copy.py
