@@ -5,50 +5,42 @@
 An imitation-learning framework that replaces the reward function with a single
 information-theoretic quantity: the log-count of trajectories still reachable
 from the current state to the goal ("goal-reachability entropy"). A good policy
-is one that always moves toward lower entropy. This repo also contains a second,
-related line of work — a **Heat Dissipation Policy** that replaces diffusion
-policies' Gaussian noise with the heat equation as the forward corruption process.
+is one that always moves toward lower entropy.
 
 ```
 H(s, s_g) = log |{ τ : s →τ→ s_g, |τ| ≤ H }|
 ```
 
-## Headline results
+A related, code-independent line of work — the **Heat Dissipation Policy**,
+which replaces diffusion policies' Gaussian noise with the heat equation as the
+forward corruption process — lives in a separate repo:
+[HeatDissipationPolicy](https://github.com/sakibchowdhury131/HeatDissipationPolicy).
+The two share only a benchmark (Push-T) and a thesis (entropy contraction as the
+learning signal); neither imports or depends on the other.
 
-- **Push-T, adversarial start:** EFP trained with failure-demonstration
-  supervision reaches 64%/56% success (Standard/Perturb conditions) while every
-  baseline (plain EFP, Diffusion Policy, BC, MDN-BC) scores ≤24%/0%. Failure
-  demos are not an optimization — without them EFP's entropy guidance actively
-  hurts performance (0% in both conditions, worse than the Diffusion Policy
-  baseline).
-- **Heat Dissipation Policy:** trained the naive way, it never learns
-  (eval score flat at 0.000 for 100 epochs). Randomizing the DC/zero-frequency
-  offset of each training action chunk ("DC augmentation") fixes this —
-  best eval score 0.857, and on 16 held-out seeds it's competitive with
-  standard Diffusion Policy (mean score 0.912 vs 0.982, wins 6/16 seeds).
+## Headline result
 
-Full charts, per-seed tables, and gif/video rollouts for every method and
-condition are on the [results page](https://claude.ai/code/artifact/b035f3a5-932d-4362-9e3e-6947c9284289).
+**Push-T, adversarial start:** EFP trained with failure-demonstration
+supervision reaches 64%/56% success (Standard/Perturb conditions) while every
+baseline (plain EFP, Diffusion Policy, BC, MDN-BC) scores ≤24%/0%. Failure
+demos are not an optimization — without them EFP's entropy guidance actively
+hurts performance (0% in both conditions, worse than the Diffusion Policy
+baseline).
+
+Full charts, per-condition tables, and gif rollouts for every method are on the
+[results page](https://claude.ai/code/artifact/b035f3a5-932d-4362-9e3e-6947c9284289).
 
 ## Repository layout
 
 | Path | Contents |
 |---|---|
 | `entropic_flow_policy.py` | Exp 1 — 3-link planar arm reaching, full EFP pipeline |
-| `efp_hard_v2.py` … `efp_hard_v6.py` | Exp 2 — 2D multi-modal obstacle navigation, iterated task design |
+| `efp_hard_v2.py` … `efp_hard_v6.py` | Exp 2 — 2D navigation around road-block obstacles, iterated task design (open gap → closed gap → fixed start zone) |
 | `efp_pusht.py` | Exp 3 — EFP (with/without failure supervision) on the `gym-pusht` benchmark |
 | `efp_pusht_real.py` | EFP vs. Diffusion Policy on the official Push-T human-demo dataset |
 | `efp_guided_bc.py` | Ablation — entropy-gradient guidance applied on top of plain BC |
-| `viz_pusht.py`, `viz_real.py`, `plot_trajectories.py` | Rollout/entropy-field visualization utilities |
-| `heat-dissipation-policy-pushT.py` | Heat Dissipation Policy implementation for Push-T |
-| `compare_dp_heat_pusht.py` | Main training script — Diffusion Policy vs. Heat Policy, side by side |
-| `eval_configs.py` | Post-hoc DP-vs-Heat evaluation across diverse seeds, renders comparison videos |
-| `eval_novel.py` | Generalization eval — DC-augmented Heat vs. DP on unseen/hard configurations |
-| `plot_dc_vs_noise.py` | Sensitivity analysis for the DC-augmentation ablation |
-| `scores.csv` | Per-epoch loss/score log for the DP-vs-Heat training run |
+| `viz_pusht.py`, `viz_real.py` | Rollout and entropy-field visualization utilities |
 | `docs/research_handoff.md` | Original theory write-up: formalism, Exp 1 & 2 derivations |
-| `docs/heat_dissipation_policy.md` | Heat-equation generative modeling: theory, math, three research directions |
-| `generative_extensions/` | Side project — heat-dissipation and constant-entropy image/video generation |
 
 Trained checkpoints, the raw Push-T dataset, and full-resolution videos/gifs are
 not tracked in git (see `.gitignore`) — they're large and regenerable from these
