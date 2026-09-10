@@ -14,7 +14,8 @@ H(s, s_g) = log |{ τ : s →τ→ s_g, |τ| ≤ H }|
 A related, code-independent line of work — the **Heat Dissipation Policy**,
 which replaces diffusion policies' Gaussian noise with the heat equation as the
 forward corruption process — lives in a separate repo:
-[HeatDissipationPolicy](https://github.com/sakibchowdhury131/HeatDissipationPolicy).
+[HeatDissipationPolicy](https://github.com/sakibchowdhury131/HeatDissipationPolicy)
+([its findings page](https://claude.ai/code/artifact/121445eb-ae01-462d-bcf0-966809cf0231)).
 The two share only a benchmark (Push-T) and a thesis (entropy contraction as the
 learning signal); neither imports or depends on the other.
 
